@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aim Trainer</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="menu">
+    <h1>Aim Trainer</h1>
+
+    <button id="startBtn">Static Training</button>
+
+    <div id="stats">
+        <p>Score: <span id="score">0</span></p>
+        <p>Hits: <span id="hits">0</span></p>
+        <p>Misses: <span id="misses">0</span></p>
+        <p>Accuracy: <span id="accuracy">100%</span></p>
+        <p>Time: <span id="timer">30</span></p>
+    </div>
+</div>
+
+<div id="game">
+
+    <div id="target"></div>
+
+    <div id="crosshair">
+        <div id="v"></div>
+        <div id="h"></div>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
