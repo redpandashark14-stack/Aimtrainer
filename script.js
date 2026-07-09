@@ -1,126 +1,178 @@
-const target = document.getElementById("target");
+import * as THREE from "three";
 
-const scoreText = document.getElementById("score");
-const hitText = document.getElementById("hits");
-const missText = document.getElementById("misses");
-const accuracyText = document.getElementById("accuracy");
-const timerText = document.getElementById("timer");
+const scene=new THREE.Scene();
 
-const startBtn = document.getElementById("startBtn");
+scene.background=new THREE.Color(0x2d2d2d);
 
-let score = 0;
-let hits = 0;
-let misses = 0;
+const camera=new THREE.PerspectiveCamera(
+75,
+window.innerWidth/window.innerHeight,
+0.1,
+1000
+);
 
-let time = 30;
+camera.position.y=2;
 
-let playing = false;
+const renderer=new THREE.WebGLRenderer({antialias:true});
 
-function spawnTarget(){
+renderer.setSize(window.innerWidth,window.innerHeight);
 
-    let x = Math.random()*(window.innerWidth-100);
+document.body.appendChild(renderer.domElement);
 
-    let y = Math.random()*(window.innerHeight-100);
+const light=new THREE.DirectionalLight(0xffffff,2);
 
-    target.style.left = x+"px";
-    target.style.top = y+"px";
+light.position.set(5,10,5);
 
-}
+scene.add(light);
 
-function updateStats(){
+scene.add(new THREE.AmbientLight(0xffffff,.5));
 
-    scoreText.innerHTML = score;
+const floor=new THREE.Mesh(
 
-    hitText.innerHTML = hits;
+new THREE.PlaneGeometry(100,100),
 
-    missText.innerHTML = misses;
+new THREE.MeshStandardMaterial({
 
-    let accuracy = hits+misses==0?100:Math.round(hits/(hits+misses)*100);
+color:0x606060
 
-    accuracyText.innerHTML = accuracy+"%";
+})
 
-}
+);
 
-startBtn.onclick=function(){
+floor.rotation.x=-Math.PI/2;
 
-    if(playing) return;
+scene.add(floor);
 
-    playing=true;
+const wall=new THREE.Mesh(
 
-    score=0;
-    hits=0;
-    misses=0;
-    time=30;
+new THREE.BoxGeometry(40,15,1),
 
-    updateStats();
+new THREE.MeshStandardMaterial({
 
-    timerText.innerHTML=time;
+color:0x888888
 
-    target.style.display="block";
+})
 
-    spawnTarget();
+);
 
-    let timer=setInterval(()=>{
+wall.position.set(0,7,-28);
 
-        time--;
+scene.add(wall);
 
-        timerText.innerHTML=time;
+const target=new THREE.Mesh(
 
-        if(time<=0){
+new THREE.SphereGeometry(.5),
 
-            clearInterval(timer);
+new THREE.MeshStandardMaterial({
 
-            target.style.display="none";
+color:"red"
 
-            playing=false;
+})
 
-            alert(
-                "Finished!\n\n"+
-                "Score: "+score+
-                "\nHits: "+hits+
-                "\nMisses: "+misses
-            );
+);
 
-        }
+target.position.set(0,5,-27.4);
 
-    },1000);
+scene.add(target);
 
-}
+const keys={};
 
-target.onclick=function(e){
+document.addEventListener("keydown",e=>{
 
-    e.stopPropagation();
+keys[e.key.toLowerCase()]=true;
 
-    if(!playing)return;
+});
 
-    score+=100;
+document.addEventListener("keyup",e=>{
 
-    hits++;
+keys[e.key.toLowerCase()]=false;
 
-    updateStats();
+});
 
-    spawnTarget();
+let yaw=0;
 
-}
+let pitch=0;
 
-document.body.onclick=function(){
+document.body.onclick=()=>{
 
-    if(!playing)return;
+document.body.requestPointerLock();
 
-    score-=50;
-
-    misses++;
-
-    updateStats();
-
-}
+};
 
 document.addEventListener("mousemove",e=>{
 
-    let c=document.getElementById("crosshair");
+if(document.pointerLockElement!==document.body)return;
 
-    c.style.left=e.clientX+"px";
+yaw-=e.movementX*.002;
 
-    c.style.top=e.clientY+"px";
+pitch-=e.movementY*.002;
+
+pitch=Math.max(-1.5,Math.min(1.5,pitch));
+
+camera.rotation.order="YXZ";
+
+camera.rotation.y=yaw;
+
+camera.rotation.x=pitch;
 
 });
+
+function move(){
+
+const speed=.15;
+
+if(keys.w){
+
+camera.position.x-=Math.sin(yaw)*speed;
+
+camera.position.z-=Math.cos(yaw)*speed;
+
+}
+
+if(keys.s){
+
+camera.position.x+=Math.sin(yaw)*speed;
+
+camera.position.z+=Math.cos(yaw)*speed;
+
+}
+
+if(keys.a){
+
+camera.position.x-=Math.cos(yaw)*speed;
+
+camera.position.z+=Math.sin(yaw)*speed;
+
+}
+
+if(keys.d){
+
+camera.position.x+=Math.cos(yaw)*speed;
+
+camera.position.z-=Math.sin(yaw)*speed;
+
+}
+
+}
+
+window.addEventListener("resize",()=>{
+
+camera.aspect=window.innerWidth/window.innerHeight;
+
+camera.updateProjectionMatrix();
+
+renderer.setSize(window.innerWidth,window.innerHeight);
+
+});
+
+function animate(){
+
+requestAnimationFrame(animate);
+
+move();
+
+renderer.render(scene,camera);
+
+}
+
+animate();
