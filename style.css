@@ -1,119 +1,87 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    cursor:none;
-    user-select:none;
-    font-family:Arial;
-}
-
 body{
-    background:#1b1b1b;
-    overflow:hidden;
-}
 
-#menu{
-    position:absolute;
-    left:20px;
-    top:20px;
-    color:white;
-    z-index:100;
-}
+margin:0;
 
-button{
+overflow:hidden;
 
-    width:180px;
-    height:50px;
+background:black;
 
-    border:none;
+cursor:none;
 
-    background:#2ecc71;
-
-    color:white;
-
-    font-size:20px;
-
-    border-radius:10px;
-
-    margin-top:20px;
-
-    cursor:pointer;
-}
-
-button:hover{
-
-    background:#27ae60;
+font-family:Arial;
 
 }
 
-#game{
+canvas{
 
-    width:100vw;
-
-    height:100vh;
-
-    position:relative;
-
-}
-
-#target{
-
-    position:absolute;
-
-    width:70px;
-
-    height:70px;
-
-    background:#ff4040;
-
-    border-radius:50%;
-
-    display:none;
+display:block;
 
 }
 
 #crosshair{
 
-    position:absolute;
+position:absolute;
 
-    pointer-events:none;
+left:50%;
 
-    left:50%;
+top:50%;
 
-    top:50%;
+width:6px;
 
-    transform:translate(-50%,-50%);
+height:6px;
 
-}
+border:2px solid white;
 
-#v{
+border-radius:50%;
 
-    position:absolute;
+transform:translate(-50%,-50%);
 
-    width:4px;
-
-    height:30px;
-
-    background:white;
-
-    left:-2px;
-
-    top:-15px;
+pointer-events:none;
 
 }
 
-#h{
+#menu{
 
-    position:absolute;
+position:absolute;
 
-    width:30px;
+left:50%;
 
-    height:4px;
+top:50%;
 
-    background:white;
+transform:translate(-50%,-50%);
 
-    left:-15px;
+background:#202020;
 
-    top:-2px;
+padding:30px;
+
+border-radius:15px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:15px;
+
+}
+
+button{
+
+padding:15px;
+
+font-size:22px;
+
+background:#3a3a3a;
+
+color:white;
+
+border:none;
+
+cursor:pointer;
+
+}
+
+button:hover{
+
+background:#5a5a5a;
 
 }
